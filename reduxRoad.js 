@@ -1,0 +1,142 @@
+const initialWagonState = {
+  supplies: 100,
+  distance: 0,
+  days: 0,
+  cash: 200,
+}
+
+const reducer = (state = initialWagonState, action) => {
+  switch(action.type) {
+    case 'gather': {
+      return {...state, 
+      supplies: state.supplies + 15,
+      days: state.days += 1,
+      }
+    }
+    case 'travel': {
+      let newSupplies = state.supplies - 20 * action.payload;
+      let newDistance = state.distance + 10 * action.payload;
+      let newDays = state.days + action.payload;
+
+      if (state.supplies <= 0) {
+        return false
+      } else if (newSupplies < 0) { 
+        return false
+      }
+
+      return {
+        ...state,
+        supplies: newSupplies,
+        distance: newDistance,
+        days: newDays,
+      }
+    }
+
+    case 'tippedWagon': {
+      return {...state, 
+      supplies: state.supplies - 30,
+      days: state.days + 1,
+      }
+    }
+
+    case 'sell': {
+      
+      let newSupplies = state.supplies - 20;
+      let newCash = state.cash + 5;
+
+      if (state.supplies <= 0) {
+        return false
+      } else if (newSupplies < 0) {
+        return false
+      }
+      
+      return {...state, 
+      supplies: newSupplies,
+      cash: newCash,
+      }
+    }
+
+    case 'buy': {
+      let newSupplies = state.supplies + 20;
+      let newCash = state.cash - 15;
+
+      if (state.cash <= 0) {
+        return false
+      } else if (newCash < 0) {
+        return false
+      }
+      
+      return {...state, 
+      supplies: newSupplies,
+      cash: newCash,
+      }
+    }
+
+    case 'theft': {
+      let newCash = state.cash * 0.5;
+
+      if (state.cash <= 0) {
+        return {...state, 
+          cash: 0
+        }
+      } 
+      else if (newCash <= 0) {
+        return {...state, 
+          cash: 0
+        }
+      } 
+      
+      return {...state, 
+      cash: state.cash * 0.5,
+      }
+    }
+
+    default: {
+      return state
+    }
+  }
+}
+
+
+let actionTravel = {
+  type: 'travel',
+  payload: 1,
+}
+
+let actionGather = {
+  type: 'gather',
+}
+
+let actionTippedWagon = {
+  type: 'tippedWagon',
+}
+
+let actionThreeDays = {
+  type: 'travel',
+  payload: 3,
+}
+
+let actionSell = {
+  type: 'sell',
+}
+let actionBuy = {
+  type: 'buy',
+}
+let actionTheft = {
+  type: 'theft',
+
+}
+
+
+let myState = reducer(undefined, {});
+// myState = reducer(myState, actionTravel);
+// myState = reducer(myState, actionGather);
+// myState = reducer(myState, actionTippedWagon)
+// myState = reducer(myState, actionThreeDays);
+
+//check additional features
+// myState = reducer(myState, actionSell);
+// myState = reducer(myState, actionBuy);
+// myState = reducer(myState, actionTheft);
+
+console.log(myState)
